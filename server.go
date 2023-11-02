@@ -1,12 +1,19 @@
 package main
 
 import (
+	"log"
+
 	"github.com/ashcoder666/g0-blog/database"
 	"github.com/ashcoder666/g0-blog/router"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/joho/godotenv"
 )
 
 func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Panic("env load failed")
+	}
 	database.ConnectDB()
 }
 func main() {
@@ -15,6 +22,8 @@ func main() {
 
 	defer postgresDB.Close()
 	app := fiber.New()
+
+	app.Use(logger.New())
 
 	// type User struct {
 	// 	Name     string `json:"name"`
